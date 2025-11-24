@@ -1,49 +1,67 @@
-import ProductCard from "./ProductCard"
+"use client"
 
-// Mock data for now, will fetch from API later
-const FEATURED_PRODUCTS = [
+import ProductCard from "./ProductCard"
+import { Button } from "@/components/ui/button"
+import Link from "next/link"
+
+const PRODUCTS = [
     {
         id: "1",
-        name: "Premium Cotton Tee",
-        price: 45.00,
-        image: "https://images.unsplash.com/photo-1521572163474-6864f9cf17ab?q=80&w=1780&auto=format&fit=crop",
-        category: "Men"
+        name: "Oversized Wool Coat",
+        category: "Outerwear",
+        price: 299,
+        image: "https://images.unsplash.com/photo-1539533018447-63fcce2678e3?q=80&w=2574&auto=format&fit=crop"
     },
     {
         id: "2",
-        name: "Silk Blouse",
-        price: 120.00,
-        image: "https://images.unsplash.com/photo-1564257631407-4deb1f99d992?q=80&w=1974&auto=format&fit=crop",
-        category: "Women"
+        name: "Pleated Wide Leg Trousers",
+        category: "Bottoms",
+        price: 159,
+        image: "https://images.unsplash.com/photo-1509631179647-0177331693ae?q=80&w=2576&auto=format&fit=crop"
     },
     {
         id: "3",
-        name: "Leather Wallet",
-        price: 85.00,
-        image: "https://images.unsplash.com/photo-1627123424574-181ce5171c98?q=80&w=1887&auto=format&fit=crop",
-        category: "Accessories"
+        name: "Cashmere Turtleneck",
+        category: "Knitwear",
+        price: 189,
+        image: "https://images.unsplash.com/photo-1576566588028-4147f3842f27?q=80&w=2564&auto=format&fit=crop"
     },
     {
         id: "4",
-        name: "Denim Jacket",
-        price: 150.00,
-        image: "https://images.unsplash.com/photo-1576995853123-5a10305d93c0?q=80&w=2070&auto=format&fit=crop",
-        category: "Men"
+        name: "Leather Chelsea Boots",
+        category: "Footwear",
+        price: 249,
+        image: "https://images.unsplash.com/photo-1605763240004-7e93b172d754?q=80&w=2574&auto=format&fit=crop"
     }
 ]
 
 export default function FeaturedProducts() {
     return (
-        <section className="py-24 px-4 sm:px-6 lg:px-8 max-w-7xl mx-auto">
-            <div className="text-center mb-16">
-                <h2 className="text-3xl md:text-4xl font-bold text-gradient mb-4">Trending Now</h2>
-                <p className="text-muted-foreground">Curated picks for the season.</p>
-            </div>
+        <section className="py-24 bg-background">
+            <div className="container-width">
+                <div className="flex items-end justify-between mb-12">
+                    <div>
+                        <h2 className="text-3xl md:text-4xl font-heading font-bold mb-4">Featured Collection</h2>
+                        <p className="text-muted-foreground max-w-md">
+                            Curated pieces from our latest season. Timeless designs meets contemporary aesthetics.
+                        </p>
+                    </div>
+                    <Button variant="link" className="hidden md:flex text-lg" asChild>
+                        <Link href="/shop">View All Products &rarr;</Link>
+                    </Button>
+                </div>
 
-            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8">
-                {FEATURED_PRODUCTS.map((product) => (
-                    <ProductCard key={product.id} {...product} />
-                ))}
+                <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8">
+                    {PRODUCTS.map((product) => (
+                        <ProductCard key={product.id} product={product} />
+                    ))}
+                </div>
+
+                <div className="mt-12 flex justify-center md:hidden">
+                    <Button variant="outline" size="lg" asChild>
+                        <Link href="/shop">View All Products</Link>
+                    </Button>
+                </div>
             </div>
         </section>
     )

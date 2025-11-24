@@ -1,4 +1,4 @@
-// File: C:\Users\yash1\OneDrive\Documents\GitHub\Roveign\Roveign\app\layout.tsx
+// File: C:\Users\yash1\OneDrive\Documents\GitHub\Roveign\app\layout.tsx
 import * as entry from '../../../app/layout.js'
 import type { ResolvingMetadata, ResolvingViewport } from 'next/dist/lib/metadata/types/metadata-interface.js'
 

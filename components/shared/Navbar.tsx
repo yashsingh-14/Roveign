@@ -2,14 +2,28 @@
 
 import Link from "next/link"
 import { usePathname } from "next/navigation"
-import { motion } from "framer-motion"
-import { ShoppingBag, Menu, X, User } from "lucide-react"
-import { useState } from "react"
+import { motion, AnimatePresence } from "framer-motion"
+import { Menu, X, User } from "lucide-react"
+import { useState, useEffect } from "react"
 import { cn } from "@/lib/utils"
+import CartSheet from "@/components/cart/cart-sheet"
+import { Button } from "@/components/ui/button"
+
+import { useSession } from "next-auth/react"
 
 export default function Navbar() {
     const [isOpen, setIsOpen] = useState(false)
+    const [scrolled, setScrolled] = useState(false)
     const pathname = usePathname()
+    const { data: session } = useSession()
+
+    useEffect(() => {
+        const handleScroll = () => {
+            setScrolled(window.scrollY > 20)
+        }
+        window.addEventListener("scroll", handleScroll)
+        return () => window.removeEventListener("scroll", handleScroll)
+    }, [])
 
     const links = [
         { href: "/", label: "Home" },
@@ -19,86 +33,111 @@ export default function Navbar() {
     ]
 
     return (
-        <nav className="fixed top-0 w-full z-50 glass border-b border-white/10">
-            <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-                <div className="flex items-center justify-between h-16">
+        <nav
+            className={cn(
+                "fixed top-0 w-full z-50 transition-all duration-300",
+                scrolled ? "glass-nav py-2" : "bg-transparent py-4"
+            )}
+        >
+            <div className="container-width">
+                <div className="flex items-center justify-between h-14">
+                    {/* Logo */}
                     <div className="flex-shrink-0">
-                        <Link href="/" className="text-2xl font-bold text-gradient">
-                            Roveign
+                        <Link href="/" className="text-2xl font-heading font-bold tracking-tight">
+                            ROVEIGN
                         </Link>
                     </div>
 
+                    {/* Desktop Navigation */}
                     <div className="hidden md:block">
-                        <div className="ml-10 flex items-baseline space-x-4">
+                        <div className="ml-10 flex items-baseline space-x-8">
                             {links.map((link) => (
                                 <Link
                                     key={link.href}
                                     href={link.href}
                                     className={cn(
-                                        "px-3 py-2 rounded-md text-sm font-medium transition-colors duration-200",
-                                        pathname === link.href
-                                            ? "text-primary bg-primary/10"
-                                            : "text-muted-foreground hover:text-primary hover:bg-primary/5"
+                                        "relative px-1 py-2 text-sm font-medium transition-colors hover:text-primary",
+                                        pathname === link.href ? "text-primary" : "text-muted-foreground"
                                     )}
                                 >
                                     {link.label}
+                                    {pathname === link.href && (
+                                        <motion.div
+                                            layoutId="navbar-indicator"
+                                            className="absolute bottom-0 left-0 right-0 h-0.5 bg-primary"
+                                            transition={{ type: "spring", stiffness: 380, damping: 30 }}
+                                        />
+                                    )}
                                 </Link>
                             ))}
                         </div>
                     </div>
 
-                    <div className="hidden md:block">
-                        <div className="ml-4 flex items-center md:ml-6 space-x-4">
-                            <button className="p-2 rounded-full text-muted-foreground hover:text-primary transition-colors">
-                                <User className="h-6 w-6" />
-                            </button>
-                            <button className="p-2 rounded-full text-muted-foreground hover:text-primary transition-colors relative">
-                                <ShoppingBag className="h-6 w-6" />
-                                <span className="absolute top-0 right-0 inline-flex items-center justify-center px-2 py-1 text-xs font-bold leading-none text-white transform translate-x-1/4 -translate-y-1/4 bg-red-600 rounded-full">
-                                    0
-                                </span>
-                            </button>
-                        </div>
+                    {/* Icons */}
+                    <div className="hidden md:flex items-center space-x-4">
+                        {session ? (
+                            <Button variant="ghost" size="icon" className="hover:bg-transparent" asChild>
+                                <Link href="/profile">
+                                    <User className="h-5 w-5" />
+                                </Link>
+                            </Button>
+                        ) : (
+                            <Button variant="ghost" size="sm" asChild>
+                                <Link href="/login">Sign In</Link>
+                            </Button>
+                        )}
+                        <CartSheet />
                     </div>
 
-                    <div className="-mr-2 flex md:hidden">
-                        <button
+                    {/* Mobile Menu Button */}
+                    <div className="flex md:hidden">
+                        <Button
+                            variant="ghost"
+                            size="icon"
                             onClick={() => setIsOpen(!isOpen)}
-                            className="inline-flex items-center justify-center p-2 rounded-md text-muted-foreground hover:text-primary hover:bg-primary/10 focus:outline-none"
+                            className="hover:bg-transparent"
                         >
                             {isOpen ? <X className="h-6 w-6" /> : <Menu className="h-6 w-6" />}
-                        </button>
+                        </Button>
                     </div>
                 </div>
             </div>
 
-            {/* Mobile menu */}
-            <motion.div
-                initial={false}
-                animate={isOpen ? "open" : "closed"}
-                variants={{
-                    open: { opacity: 1, height: "auto" },
-                    closed: { opacity: 0, height: 0 },
-                }}
-                className="md:hidden overflow-hidden glass"
-            >
-                <div className="px-2 pt-2 pb-3 space-y-1 sm:px-3">
-                    {links.map((link) => (
-                        <Link
-                            key={link.href}
-                            href={link.href}
-                            className={cn(
-                                "block px-3 py-2 rounded-md text-base font-medium",
-                                pathname === link.href
-                                    ? "text-primary bg-primary/10"
-                                    : "text-muted-foreground hover:text-primary hover:bg-primary/5"
-                            )}
-                        >
-                            {link.label}
-                        </Link>
-                    ))}
-                </div>
-            </motion.div>
+            {/* Mobile Menu */}
+            <AnimatePresence>
+                {isOpen && (
+                    <motion.div
+                        initial={{ opacity: 0, height: 0 }}
+                        animate={{ opacity: 1, height: "auto" }}
+                        exit={{ opacity: 0, height: 0 }}
+                        className="md:hidden overflow-hidden glass-panel border-t border-white/10"
+                    >
+                        <div className="px-4 pt-2 pb-6 space-y-2">
+                            {links.map((link) => (
+                                <Link
+                                    key={link.href}
+                                    href={link.href}
+                                    onClick={() => setIsOpen(false)}
+                                    className={cn(
+                                        "block px-3 py-3 rounded-md text-base font-medium transition-colors",
+                                        pathname === link.href
+                                            ? "bg-primary/10 text-primary"
+                                            : "text-muted-foreground hover:bg-primary/5 hover:text-primary"
+                                    )}
+                                >
+                                    {link.label}
+                                </Link>
+                            ))}
+                            <div className="pt-4 flex items-center justify-between px-3">
+                                <span className="text-sm font-medium text-muted-foreground">Account</span>
+                                <Button variant="ghost" size="icon">
+                                    <User className="h-5 w-5" />
+                                </Button>
+                            </div>
+                        </div>
+                    </motion.div>
+                )}
+            </AnimatePresence>
         </nav>
     )
 }

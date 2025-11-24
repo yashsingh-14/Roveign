@@ -1,12 +1,14 @@
 "use client"
 
-import { Card, CardContent, CardFooter } from "@/components/ui/card"
-import { Button } from "@/components/ui/button"
 import { motion } from "framer-motion"
+import Image from "next/image"
 import Link from "next/link"
-import { ShoppingBag } from "lucide-react"
+import { Button } from "@/components/ui/button"
+import { useCartStore } from "@/lib/store/cart-store"
+import { formatPrice } from "@/lib/utils"
+import { toast } from "sonner"
 
-interface ProductProps {
+interface Product {
     id: string
     name: string
     price: number
@@ -14,37 +16,61 @@ interface ProductProps {
     category: string
 }
 
-export default function ProductCard({ id, name, price, image, category }: ProductProps) {
+interface ProductCardProps {
+    product: Product
+}
+
+export default function ProductCard({ product }: ProductCardProps) {
+    const addItem = useCartStore((state) => state.addItem)
+
+    const handleAddToCart = (e: React.MouseEvent) => {
+        e.preventDefault()
+        e.stopPropagation()
+        addItem({
+            id: product.id,
+            name: product.name,
+            price: product.price,
+            image: product.image,
+            quantity: 1,
+            color: "Default",
+            size: "M"
+        })
+        toast.success("Added to cart")
+    }
+
     return (
         <motion.div
-            whileHover={{ y: -10 }}
-            transition={{ duration: 0.3 }}
+            initial={{ opacity: 0, y: 20 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            className="group relative"
         >
-            <Card className="overflow-hidden border-none shadow-lg glass group">
-                <div className="relative aspect-[3/4] overflow-hidden">
-                    <img
-                        src={image}
-                        alt={name}
-                        className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110"
+            <Link href={`/product/${product.id}`}>
+                <div className="relative aspect-[3/4] overflow-hidden bg-secondary rounded-sm">
+                    <Image
+                        src={product.image}
+                        alt={product.name}
+                        fill
+                        className="object-cover transition-transform duration-700 group-hover:scale-105"
                     />
-                    <div className="absolute inset-0 bg-black/0 group-hover:bg-black/20 transition-colors duration-300" />
-                    <Button
-                        size="icon"
-                        className="absolute bottom-4 right-4 opacity-0 group-hover:opacity-100 transition-opacity duration-300 translate-y-4 group-hover:translate-y-0"
-                    >
-                        <ShoppingBag className="h-5 w-5" />
-                    </Button>
+                    <div className="absolute inset-0 bg-black/0 group-hover:bg-black/10 transition-colors duration-300" />
+
+                    {/* Quick Add Button */}
+                    <div className="absolute bottom-0 left-0 right-0 p-4 translate-y-full group-hover:translate-y-0 transition-transform duration-300 ease-in-out">
+                        <Button
+                            className="w-full bg-white text-black hover:bg-white/90 shadow-lg"
+                            onClick={handleAddToCart}
+                        >
+                            Quick Add
+                        </Button>
+                    </div>
                 </div>
-                <CardContent className="p-4">
-                    <p className="text-sm text-muted-foreground mb-1">{category}</p>
-                    <Link href={`/product/${id}`} className="block">
-                        <h3 className="font-semibold text-lg hover:text-primary transition-colors line-clamp-1">{name}</h3>
-                    </Link>
-                </CardContent>
-                <CardFooter className="p-4 pt-0 flex justify-between items-center">
-                    <span className="font-bold text-lg">${price.toFixed(2)}</span>
-                </CardFooter>
-            </Card>
+                <div className="mt-4 space-y-1">
+                    <h3 className="text-sm font-medium text-foreground">{product.name}</h3>
+                    <p className="text-sm text-muted-foreground">{product.category}</p>
+                    <p className="text-sm font-semibold">{formatPrice(product.price)}</p>
+                </div>
+            </Link>
         </motion.div>
     )
 }
