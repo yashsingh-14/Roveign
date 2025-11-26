@@ -57,8 +57,8 @@ export default function AdminDashboard() {
                         <CardTitle>Overview</CardTitle>
                     </CardHeader>
                     <CardContent className="pl-2">
-                        <div className="h-[200px] flex items-center justify-center text-muted-foreground">
-                            Chart Placeholder
+                        <div className="h-[200px] flex items-center justify-center text-muted-foreground bg-muted/10 rounded-md border border-dashed">
+                            Chart Visualization Placeholder
                         </div>
                     </CardContent>
                 </Card>
@@ -81,6 +81,20 @@ export default function AdminDashboard() {
                                     <p className="text-sm text-muted-foreground">jackson.lee@email.com</p>
                                 </div>
                                 <div className="ml-auto font-medium">+$39.00</div>
+                            </div>
+                            <div className="flex items-center">
+                                <div className="ml-4 space-y-1">
+                                    <p className="text-sm font-medium leading-none">Isabella Nguyen</p>
+                                    <p className="text-sm text-muted-foreground">isabella.nguyen@email.com</p>
+                                </div>
+                                <div className="ml-auto font-medium">+$299.00</div>
+                            </div>
+                            <div className="flex items-center">
+                                <div className="ml-4 space-y-1">
+                                    <p className="text-sm font-medium leading-none">William Kim</p>
+                                    <p className="text-sm text-muted-foreground">will@email.com</p>
+                                </div>
+                                <div className="ml-auto font-medium">+$99.00</div>
                             </div>
                         </div>
                     </CardContent>

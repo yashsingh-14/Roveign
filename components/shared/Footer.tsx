@@ -1,3 +1,5 @@
+'use client'
+
 import Link from "next/link"
 import { Facebook, Instagram, Twitter, Linkedin } from "lucide-react"
 
@@ -19,9 +21,9 @@ export default function Footer() {
                         <h3 className="font-heading font-semibold mb-4">Shop</h3>
                         <ul className="space-y-2 text-sm text-muted-foreground">
                             <li><Link href="/shop" className="hover:text-primary transition-colors">All Products</Link></li>
-                            <li><Link href="/new-arrivals" className="hover:text-primary transition-colors">New Arrivals</Link></li>
-                            <li><Link href="/collections" className="hover:text-primary transition-colors">Collections</Link></li>
-                            <li><Link href="/accessories" className="hover:text-primary transition-colors">Accessories</Link></li>
+                            <li><Link href="/shop?sort=newest" className="hover:text-primary transition-colors">New Arrivals</Link></li>
+                            <li><Link href="/categories" className="hover:text-primary transition-colors">Collections</Link></li>
+                            <li><Link href="/shop?category=accessories" className="hover:text-primary transition-colors">Accessories</Link></li>
                         </ul>
                     </div>
 
@@ -51,9 +53,34 @@ export default function Footer() {
                                 <Linkedin className="h-5 w-5" />
                             </Link>
                         </div>
-                        <p className="text-sm text-muted-foreground">
+                        <p className="text-sm text-muted-foreground mb-4">
                             Subscribe to our newsletter for exclusive offers.
                         </p>
+                        <form className="flex gap-2" onSubmit={(e) => {
+                            e.preventDefault()
+                            const email = (e.currentTarget.elements.namedItem('email') as HTMLInputElement).value
+                            fetch('/api/newsletter', {
+                                method: 'POST',
+                                body: JSON.stringify({ email })
+                            }).then(res => {
+                                if (res.ok) alert('Subscribed!')
+                                else alert('Error subscribing')
+                            })
+                        }}>
+                            <input
+                                type="email"
+                                name="email"
+                                placeholder="Enter your email"
+                                className="flex h-9 w-full rounded-md border border-input bg-transparent px-3 py-1 text-sm shadow-sm transition-colors file:border-0 file:bg-transparent file:text-sm file:font-medium placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring disabled:cursor-not-allowed disabled:opacity-50"
+                                required
+                            />
+                            <button
+                                type="submit"
+                                className="inline-flex items-center justify-center whitespace-nowrap rounded-md text-sm font-medium transition-colors focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring disabled:pointer-events-none disabled:opacity-50 bg-primary text-primary-foreground shadow hover:bg-primary/90 h-9 px-4 py-2"
+                            >
+                                Subscribe
+                            </button>
+                        </form>
                     </div>
                 </div>
 

@@ -1,61 +1,58 @@
 "use client"
 
 import { Button } from "@/components/ui/button"
-import { CheckCircle2 } from "lucide-react"
+import { CheckCircle } from "lucide-react"
 import Link from "next/link"
-import { useEffect } from "react"
-import { useCartStore } from "@/lib/store/cart-store"
-import confetti from "canvas-confetti"
+import Navbar from "@/components/shared/Navbar"
+import Footer from "@/components/shared/Footer"
+import { motion } from "framer-motion"
 
 export default function SuccessPage() {
-    const clearCart = useCartStore((state) => state.clearCart)
-
-    useEffect(() => {
-        clearCart()
-        const duration = 3 * 1000
-        const animationEnd = Date.now() + duration
-        const defaults = { startVelocity: 30, spread: 360, ticks: 60, zIndex: 0 }
-
-        const random = (min: number, max: number) => Math.random() * (max - min) + min
-
-        const interval: any = setInterval(function () {
-            const timeLeft = animationEnd - Date.now()
-
-            if (timeLeft <= 0) {
-                return clearInterval(interval)
-            }
-
-            const particleCount = 50 * (timeLeft / duration)
-            confetti({
-                ...defaults, particleCount,
-                origin: { x: random(0.1, 0.3), y: Math.random() - 0.2 }
-            })
-            confetti({
-                ...defaults, particleCount,
-                origin: { x: random(0.7, 0.9), y: Math.random() - 0.2 }
-            })
-        }, 250)
-    }, [clearCart])
-
     return (
-        <div className="flex flex-col items-center justify-center min-h-screen bg-background p-4">
-            <div className="flex flex-col items-center space-y-6 text-center max-w-md">
-                <div className="rounded-full bg-green-100 p-3 dark:bg-green-900/20">
-                    <CheckCircle2 className="h-16 w-16 text-green-600 dark:text-green-500" />
-                </div>
-                <h1 className="text-3xl font-heading font-bold">Payment Successful!</h1>
-                <p className="text-muted-foreground">
-                    Thank you for your purchase. Your order has been confirmed and will be shipped soon.
-                </p>
-                <div className="flex flex-col w-full gap-3 pt-4">
-                    <Button asChild size="lg" className="w-full">
+        <main className="min-h-screen bg-background">
+            <Navbar />
+            <div className="min-h-[80vh] flex flex-col items-center justify-center text-center px-4">
+                <motion.div
+                    initial={{ scale: 0.5, opacity: 0 }}
+                    animate={{ scale: 1, opacity: 1 }}
+                    transition={{ duration: 0.5 }}
+                >
+                    <CheckCircle className="h-24 w-24 text-green-500 mb-6" />
+                </motion.div>
+
+                <motion.h1
+                    initial={{ y: 20, opacity: 0 }}
+                    animate={{ y: 0, opacity: 1 }}
+                    transition={{ delay: 0.2 }}
+                    className="text-4xl font-heading font-bold mb-4"
+                >
+                    Order Placed Successfully!
+                </motion.h1>
+
+                <motion.p
+                    initial={{ y: 20, opacity: 0 }}
+                    animate={{ y: 0, opacity: 1 }}
+                    transition={{ delay: 0.3 }}
+                    className="text-muted-foreground max-w-md mb-8"
+                >
+                    Thank you for your purchase. We have received your order and will send you a confirmation email shortly.
+                </motion.p>
+
+                <motion.div
+                    initial={{ y: 20, opacity: 0 }}
+                    animate={{ y: 0, opacity: 1 }}
+                    transition={{ delay: 0.4 }}
+                    className="flex gap-4"
+                >
+                    <Button asChild size="lg">
                         <Link href="/shop">Continue Shopping</Link>
                     </Button>
-                    <Button variant="outline" asChild size="lg" className="w-full">
-                        <Link href="/">Back to Home</Link>
+                    <Button variant="outline" size="lg" asChild>
+                        <Link href="/">Return Home</Link>
                     </Button>
-                </div>
+                </motion.div>
             </div>
-        </div>
+            <Footer />
+        </main>
     )
 }

@@ -4,6 +4,7 @@ import Link from "next/link"
 import { usePathname } from "next/navigation"
 import { motion, AnimatePresence } from "framer-motion"
 import { Menu, X, User } from "lucide-react"
+import Logo from "@/components/shared/Logo"
 import { useState, useEffect } from "react"
 import { cn } from "@/lib/utils"
 import CartSheet from "@/components/cart/cart-sheet"
@@ -43,8 +44,8 @@ export default function Navbar() {
                 <div className="flex items-center justify-between h-14">
                     {/* Logo */}
                     <div className="flex-shrink-0">
-                        <Link href="/" className="text-2xl font-heading font-bold tracking-tight">
-                            ROVEIGN
+                        <Link href="/" className="flex items-center gap-2">
+                            <Logo className="text-foreground" />
                         </Link>
                     </div>
 
@@ -55,12 +56,18 @@ export default function Navbar() {
                                 <Link
                                     key={link.href}
                                     href={link.href}
-                                    className={cn(
-                                        "relative px-1 py-2 text-sm font-medium transition-colors hover:text-primary",
-                                        pathname === link.href ? "text-primary" : "text-muted-foreground"
-                                    )}
+                                    className="relative px-1 py-2 text-sm font-medium transition-colors"
                                 >
-                                    {link.label}
+                                    <motion.span
+                                        className={cn(
+                                            "relative z-10",
+                                            pathname === link.href ? "text-primary" : "text-muted-foreground hover:text-primary"
+                                        )}
+                                        whileHover={{ y: -2 }}
+                                        transition={{ type: "spring", stiffness: 300 }}
+                                    >
+                                        {link.label}
+                                    </motion.span>
                                     {pathname === link.href && (
                                         <motion.div
                                             layoutId="navbar-indicator"

@@ -22,6 +22,36 @@ const CATEGORIES = [
         name: "Accessories",
         image: "https://images.unsplash.com/photo-1492707892479-7bc8d5a4ee93?q=80&w=2665&auto=format&fit=crop",
         href: "/shop?category=accessories"
+    },
+    {
+        id: "footwear",
+        name: "Footwear",
+        image: "https://images.unsplash.com/photo-1549298916-b41d501d3772?q=80&w=2624&auto=format&fit=crop",
+        href: "/shop?category=footwear"
+    },
+    {
+        id: "outerwear",
+        name: "Outerwear",
+        image: "https://images.unsplash.com/photo-1551028919-ac76c9028b1e?q=80&w=2574&auto=format&fit=crop",
+        href: "/shop?category=outerwear"
+    },
+    {
+        id: "activewear",
+        name: "Activewear",
+        image: "https://images.unsplash.com/photo-1518310383802-640c2de311b2?q=80&w=2670&auto=format&fit=crop",
+        href: "/shop?category=activewear"
+    },
+    {
+        id: "denim",
+        name: "Denim",
+        image: "https://images.unsplash.com/photo-1582418702059-97ebafb35d09?q=80&w=2515&auto=format&fit=crop",
+        href: "/shop?category=denim"
+    },
+    {
+        id: "new-arrivals",
+        name: "New Arrivals",
+        image: "https://images.unsplash.com/photo-1515886657613-9f3515b0c78f?q=80&w=2640&auto=format&fit=crop",
+        href: "/shop?sort=newest"
     }
 ]
 
@@ -29,7 +59,7 @@ export default function Categories() {
     return (
         <section className="py-24 bg-secondary/30">
             <div className="container-width">
-                <div className="grid grid-cols-1 md:grid-cols-3 gap-4 h-[600px]">
+                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 auto-rows-[400px]">
                     {CATEGORIES.map((category, index) => (
                         <Link
                             key={category.id}

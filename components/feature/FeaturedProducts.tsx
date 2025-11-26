@@ -4,36 +4,7 @@ import ProductCard from "./ProductCard"
 import { Button } from "@/components/ui/button"
 import Link from "next/link"
 
-const PRODUCTS = [
-    {
-        id: "1",
-        name: "Oversized Wool Coat",
-        category: "Outerwear",
-        price: 299,
-        image: "https://images.unsplash.com/photo-1539533018447-63fcce2678e3?q=80&w=2574&auto=format&fit=crop"
-    },
-    {
-        id: "2",
-        name: "Pleated Wide Leg Trousers",
-        category: "Bottoms",
-        price: 159,
-        image: "https://images.unsplash.com/photo-1509631179647-0177331693ae?q=80&w=2576&auto=format&fit=crop"
-    },
-    {
-        id: "3",
-        name: "Cashmere Turtleneck",
-        category: "Knitwear",
-        price: 189,
-        image: "https://images.unsplash.com/photo-1576566588028-4147f3842f27?q=80&w=2564&auto=format&fit=crop"
-    },
-    {
-        id: "4",
-        name: "Leather Chelsea Boots",
-        category: "Footwear",
-        price: 249,
-        image: "https://images.unsplash.com/photo-1605763240004-7e93b172d754?q=80&w=2574&auto=format&fit=crop"
-    }
-]
+import { PRODUCTS } from "@/lib/products"
 
 export default function FeaturedProducts() {
     return (
@@ -52,7 +23,7 @@ export default function FeaturedProducts() {
                 </div>
 
                 <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8">
-                    {PRODUCTS.map((product) => (
+                    {PRODUCTS.slice(0, 52).map((product) => (
                         <ProductCard key={product.id} product={product} />
                     ))}
                 </div>

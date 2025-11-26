@@ -13,23 +13,9 @@ export default function CartSheet() {
     const { items, removeItem, updateQuantity, total } = useCartStore()
     const itemCount = items.reduce((acc, item) => acc + item.quantity, 0)
 
-    const handleCheckout = async () => {
-        try {
-            const response = await fetch('/api/checkout', {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json',
-                },
-                body: JSON.stringify({ items }),
-            })
-
-            if (!response.ok) throw new Error('Checkout failed')
-
-            const data = await response.json()
-            window.location.href = data.url
-        } catch (error) {
-            console.error(error)
-        }
+    const handleCheckout = () => {
+        document.getElementById('close-cart')?.click()
+        window.location.href = '/checkout'
     }
 
     return (
