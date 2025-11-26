@@ -1,3 +1,4 @@
+"use client";
 import Navbar from "@/components/shared/Navbar"
 import Footer from "@/components/shared/Footer"
 import { useWishlistStore } from "@/lib/store/wishlist-store"
